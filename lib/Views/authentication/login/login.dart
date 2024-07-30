@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sharedpreference/Views/authentication/login/widgets/custom_txt_frm_fld.dart';
 import 'package:sharedpreference/Views/screens/Home.dart';
 import 'package:sharedpreference/global_widgets/global_text.dart';
@@ -15,7 +16,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: CustomGlobalText(
+        title: const CustomGlobalText(
           text: 'Login',
           textColor: Colors.white,
         ),
@@ -23,13 +24,13 @@ class _LoginState extends State<Login> {
         backgroundColor: Colors.blue,
       ),
       body: Center(
-        child: Container(
+        child: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 backgroundColor: Colors.blue,
                 radius: 35,
                 child: Icon(
@@ -38,37 +39,39 @@ class _LoginState extends State<Login> {
                   size: 50,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              CustomTxtFrmFld(
+              const CustomTxtFrmFld(
                 labelText: 'Email',
                 hintText: 'mr.noor165@gmail.com',
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              CustomTxtFrmFld(
+              const CustomTxtFrmFld(
                 labelText: 'Password',
                 hintText: '***********',
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               SizedBox(
                 width: 150,
                 height: 60,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    var sharedPref = await SharedPreferences.getInstance();
+                    sharedPref.setBool("login", true);
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
+                        MaterialPageRoute(builder: (context) => const HomePage()));
                   },
-                  child: CustomGlobalText(
-                    text: 'Save',
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                  child: const CustomGlobalText(
+                    text: 'Login',
                     textColor: Colors.white,
                     textSize: 22,
                   ),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                 ),
               ),
             ],

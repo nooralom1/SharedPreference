@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sharedpreference/Views/authentication/login/login.dart';
+import 'package:sharedpreference/Views/screens/Home.dart';
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -13,15 +15,33 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   @override
   void initState() {
+    whereToGO();
     super.initState();
-    Timer(const Duration(seconds: 3),
-            ()=>Navigator.pushReplacement(context,
-            MaterialPageRoute(builder:
-                (context) => const Login()
-            )
-        )
-    );
   }
+  void whereToGO() async {
+    var sharedPref = await SharedPreferences.getInstance();
+    var isLoggedIn = sharedPref.getBool("login");
+    Timer(
+        const Duration(seconds: 3),
+            () {
+          if(isLoggedIn!=null){
+            if(isLoggedIn){
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()));
+            }else{
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Login()));
+            }
+          }else{
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const Login()));
+          }
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
